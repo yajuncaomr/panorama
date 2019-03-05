@@ -7,14 +7,30 @@
             this.imgurl = params.imgurl;
             this.position = params.position;
             this.renderId = params.renderId;
-            this.length = params.length || 10000;
-            this.cubeGeometry = this.getCubeSkyGeometry();
-            this.genMesh();
+            this.length = params.length || 1;
+            this.cubeGeometry = this.getCubeSkyGeometry(this.length);
+            this.mesh = this.genMesh(this.cubeGeometry);
+            this.createCover();
             this.nodeManager.addChild(this);
             this.setOpacity = this.setOpacity.bind(this);
         }
-        getCubeSkyGeometry() {
-            let len = this.length;
+        createCover() {
+            this.covercubeGeometry = this.getCubeSkyGeometry(3);
+            this.coverMesh = this.genMesh(this.covercubeGeometry);
+        }
+        showCover() {
+            this.coverMesh.visible = true;
+            if (this.coverMesh.material.opacity < 0.1) {
+                this.coverMesh.material.opacity = 1;
+            }
+        }
+        setCoverOpacity(n) {
+            this.coverMesh.material.opacity = n;
+            this.coverMesh.visible = n !== 0 ? true : false;
+            this.coverMesh.material.needsUpdate = true;
+        }
+        getCubeSkyGeometry(length) {
+            let len = length;
             var geo = new THREE.CubeGeometry(len, len, len);
             var uvs = geo.faceVertexUvs[0];
             //px
@@ -107,18 +123,23 @@
             this.mesh.visible = n !== 0 ? true : false;
             this.mesh.material.needsUpdate = true;
         }
-        genMesh() {
+        genMesh(cubeGeometry, mesh) {
             var loader = new THREE.TextureLoader();
+            var mesh;
             loader.crossOrigin = "anonymous";
-            var material = new THREE.MeshBasicMaterial({ color: 0xffffff,alphaTest:0.1, transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false });
+            var material = new THREE.MeshBasicMaterial({ color: 0xffffff, alphaTest: 0.1, transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false });
             loader.load(this.imgurl, function (texture) {
                 texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
                 material.map = texture;
                 material.needsUpdate = true;
             });
-            this.mesh = new THREE.Mesh(this.cubeGeometry, material);
-            this.mesh.position.copy(this.position);
-            this.mesh.visible = false;
+            mesh = new THREE.Mesh(cubeGeometry, material);
+            mesh.position.copy(this.position);
+            mesh.visible = false;
+            return mesh;
+        }
+        setCoverPosition(position) {
+            this.coverMesh.position.copy(position);
         }
 
     }
@@ -139,7 +160,7 @@
         addChild(child) {
             if (this.children.indexOf(child) < 0) {
                 this.children.push(child);
-                this.scene.add(child.mesh);
+                this.scene.add(child.mesh, child.coverMesh);
                 this.children.length > 1 && this.setButton();
             }
         }
@@ -150,18 +171,26 @@
                 this.scene.remove(child.mesh);
             }
         }
-
         showNode(node) {
             if (this.currentNode === node) {
                 return;
             }
-            if(this.isMoving){
+            var currentNodePos = this.currentNode.mesh.position.clone();
+            var nodePos = node.position.clone();
+            if (JSON.stringify(currentNodePos) == JSON.stringify(nodePos)) {
+                //两个位置一样的节点
+                this.currentNode.setOpacity(0);
+                node.setOpacity(1);
+                this.currentNode = node;
+                this.updateButtons();
+                return;
+            }
+            if (this.isMoving) {
                 return;
             }
             this.isMoving = true;
             var currentNode = this.currentNode;
             var oldCameraPos = this.camera.position.clone();
-            var nodePos = node.position.clone();
             var oldTarget = this.controls.target.clone();//初始target
             var startTarget = oldTarget.clone();
             var directionVector = oldCameraPos.clone().sub(oldTarget);
@@ -174,21 +203,31 @@
             tween.start();
             this.hideAllButton();
             var curNodeLength = this.currentNode.length / 2;//当前节点内可相机移动范围的直径
+            var unitVector = newTarget.clone().sub(oldTarget).normalize();
+            var addVector = unitVector.multiplyScalar(curNodeLength * 3 / 2);
+
             var proportion = curNodeLength / sumDistance;
             var scope = this;
+            node.showCover();
+            // node.setCoverOpacity(0.4)
             tween.onUpdate(function () {
                 let curDistanceToStart = startTarget.distanceTo(oldTarget);//到旧控制点的距离
                 let curDistanceToEnd = newTarget.distanceTo(oldTarget);//到最终控制点的距离
                 let v1;
                 let v2;
-                let curTarget,curCamera;
+                let curTarget, curCamera, coverPosition;
+
                 //将两点之间的实际距离分为两半                                                                                 
                 if (curDistanceToEnd > sumDistance / 2) {
                     v1 = startTarget.clone().multiplyScalar(1 - proportion).clone();
+                    currentNode && currentNode.setOpacity(curDistanceToEnd / sumDistance);
+                    node.setCoverOpacity(curDistanceToStart / sumDistance);
+
                 } else {
                     v1 = newTarget.clone().multiplyScalar(1 - proportion).clone();
                     currentNode && currentNode.setOpacity(0);
                     node.setOpacity(1);
+                    node.setCoverOpacity(0);
                 }
                 // if(curDistanceToEnd < curNodeLength/2){
                 //     currentNode && currentNode.setOpacity(1 - curDistanceToStart / sumDistance);
@@ -196,8 +235,10 @@
                 v2 = oldTarget.clone().multiplyScalar(proportion).clone();
                 curTarget = v1.add(v2);
                 curCamera = curTarget.clone().add(directionVector);
-                let{x,y,z} = curTarget;
+                let { x, y, z } = curTarget;
                 scope.controls.target.set(x, y, z);
+                coverPosition = new THREE.Vector3(x, y, z).add(addVector);
+                node.setCoverPosition(coverPosition);
                 scope.camera.position.set(curCamera.x, curCamera.y, curCamera.z);
             });
             tween.onComplete(function () {
@@ -232,7 +273,7 @@
                         self.showNode(v);
                         typeof self.buttonCallback == 'function' && self.buttonCallback(i);
                     }, false)
-                })(v,i);
+                })(v, i);
 
             });
         }
@@ -242,7 +283,7 @@
                 self.updateButtons();
             };
         }
-        hideAllButton(){
+        hideAllButton() {
             this.children.forEach(function (item) {
                 var button = item.buttonDom;
                 button.style.display = 'none';
@@ -268,11 +309,10 @@
             var HalfBrowseWidth = this.dom.offsetWidth / 2;
             var HalfBrowseHeight = this.dom.offsetHeight / 2;
             var vector = world_vector.project(camera);
-            console.log(vector)
             var result = {
                 x: Math.round(vector.x * HalfBrowseWidth + HalfBrowseWidth),
                 y: Math.round(vector.y * HalfBrowseHeight + HalfBrowseHeight),
-                isFront:vector.z < 1
+                isFront: vector.z < 1
             };
             return result;
         }
