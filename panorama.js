@@ -33,55 +33,62 @@
             let len = length;
             var geo = new THREE.CubeGeometry(len, len, len);
             var uvs = geo.faceVertexUvs[0];
+            var x0 = 0, x1 = 1 / 3, x2 = 2 / 3, x3 = 1;
+            var y0 = 0, y1 = 0.25, y2 = 0.5, y3 = 0.75, y4 = 1;
             //px
-            uvs[2][0] = new THREE.Vector2(0.0003, 0.75);
-            uvs[2][1] = new THREE.Vector2(0.0003, 0.5);
-            uvs[2][2] = new THREE.Vector2(0.333333, 0.75);
-            uvs[3][0] = new THREE.Vector2(0.0003, 0.5);
-            uvs[3][1] = new THREE.Vector2(0.333333, 0.5);
-            uvs[3][2] = new THREE.Vector2(0.333333, 0.75);
-            //nx
-            uvs[0][0] = new THREE.Vector2(0.66666, 0.75);
-            uvs[0][1] = new THREE.Vector2(0.66666, 0.5);
-            uvs[0][2] = new THREE.Vector2(0.9996, 0.75);
-            uvs[1][0] = new THREE.Vector2(0.66666, 0.5);
-            uvs[1][1] = new THREE.Vector2(0.9996, 0.5);
-            uvs[1][2] = new THREE.Vector2(0.9996, 0.75);
-            //py
-            uvs[4][0] = new THREE.Vector2(0.333334, 1);
-            uvs[4][1] = new THREE.Vector2(0.333334, 0.75);
-            uvs[4][2] = new THREE.Vector2(0.666666, 1);
-            uvs[5][0] = new THREE.Vector2(0.333334, 0.75);
-            uvs[5][1] = new THREE.Vector2(0.666666, 0.75);
-            uvs[5][2] = new THREE.Vector2(0.666666, 1);
-            //ny
-            uvs[6][0] = new THREE.Vector2(0.333334, 0.5);
-            uvs[6][1] = new THREE.Vector2(0.333334, 0.25);
-            uvs[6][2] = new THREE.Vector2(0.66666, 0.5);
-            uvs[7][0] = new THREE.Vector2(0.333334, 0.25);
-            uvs[7][1] = new THREE.Vector2(0.66666, 0.25);
-            uvs[7][2] = new THREE.Vector2(0.66666, 0.5);
-            //pz
-            uvs[8][0] = new THREE.Vector2(0.333334, 0.75);
-            uvs[8][1] = new THREE.Vector2(0.333334, 0.5);
-            uvs[8][2] = new THREE.Vector2(0.66666, 0.75);
-            uvs[9][0] = new THREE.Vector2(0.333334, 0.5);
-            uvs[9][1] = new THREE.Vector2(0.66666, 0.5);
-            uvs[9][2] = new THREE.Vector2(0.66666, 0.75);
-            //nz
-            uvs[10][0] = new THREE.Vector2(0.66666, 0);
-            uvs[10][1] = new THREE.Vector2(0.66666, 0.25);
-            uvs[10][2] = new THREE.Vector2(0.333334, 0);
-            uvs[11][0] = new THREE.Vector2(0.66666, 0.25);
-            uvs[11][1] = new THREE.Vector2(0.333334, 0.25);
-            uvs[11][2] = new THREE.Vector2(0.333334, 0);
+            // uvs[2][0] = new THREE.Vector2(x3, 0.75);
+            // uvs[2][1] = new THREE.Vector2(x3, 0.5);
+            // uvs[2][2] = new THREE.Vector2(x2, 0.75);
+            // uvs[3][0] = new THREE.Vector2(x3, 0.5);
+            // uvs[3][1] = new THREE.Vector2(x2, 0.5);
+            // uvs[3][2] = new THREE.Vector2(x2, 0.75);
+
+            // //nx
+            // uvs[0][0] = new THREE.Vector2(x1, 0.75);
+            // uvs[0][1] = new THREE.Vector2(x1, 0.5);
+            // uvs[0][2] = new THREE.Vector2(x0, 0.75);
+            // uvs[1][0] = new THREE.Vector2(x1, 0.5);
+            // uvs[1][1] = new THREE.Vector2(x0, 0.5);
+            // uvs[1][2] = new THREE.Vector2(x0, 0.75);
+            // //py
+            // uvs[4][0] = new THREE.Vector2(x2, 1);
+            // uvs[4][1] = new THREE.Vector2(x2, 0.75);
+            // uvs[4][2] = new THREE.Vector2(x1, 1);
+            // uvs[5][0] = new THREE.Vector2(x2, 0.75);
+            // uvs[5][1] = new THREE.Vector2(x1, 0.75);
+            // uvs[5][2] = new THREE.Vector2(x1, 1);
+            // //ny
+            // uvs[6][0] = new THREE.Vector2(x2, 0.5);
+            // uvs[6][1] = new THREE.Vector2(x2, 0.25);
+            // uvs[6][2] = new THREE.Vector2(x1, 0.5);
+            // uvs[7][0] = new THREE.Vector2(x2, 0.25);
+            // uvs[7][1] = new THREE.Vector2(x1, 0.25);
+            // uvs[7][2] = new THREE.Vector2(x1, 0.5);
+
+            // //pz
+            // uvs[8][0] = new THREE.Vector2(x2, 0.75);
+            // uvs[8][1] = new THREE.Vector2(x2, 0.5);
+            // uvs[8][2] = new THREE.Vector2(x1, 0.75);
+            // uvs[9][0] = new THREE.Vector2(x2, 0.5);
+            // uvs[9][1] = new THREE.Vector2(x1, 0.5);
+            // uvs[9][2] = new THREE.Vector2(x1, 0.75);
+            // //nz
+            // uvs[10][0] = new THREE.Vector2(x1, 0);
+            // uvs[10][1] = new THREE.Vector2(x1, 0.25);
+            // uvs[10][2] = new THREE.Vector2(x2, 0);
+            // uvs[11][0] = new THREE.Vector2(x1, 0.25);
+            // uvs[11][1] = new THREE.Vector2(x2, 0.25);
+            // uvs[11][2] = new THREE.Vector2(x2, 0);
             return geo;
         }
         show() {
             this.mesh.visible = true;
-            if (this.mesh.material.opacity < 0.1) {
-                this.mesh.material.opacity = 1;
-            }
+            this.mesh.material.forEach(material => {
+                if (material.opacity < 0.1) {
+                    material.opacity = 1;
+                }
+            })
+
             let { x, y, z } = this.position;
             let currentNode = this.nodeManager.currentNode;
             currentNode && currentNode.hide();
@@ -119,27 +126,58 @@
             });
         }
         setOpacity(n) {
-            this.mesh.material.opacity = n;
             this.mesh.visible = n !== 0 ? true : false;
-            this.mesh.material.needsUpdate = true;
-        }
-        genMesh(cubeGeometry, mesh) {
-            var loader = new THREE.TextureLoader();
-            var mesh;
-            loader.crossOrigin = "anonymous";
-            var material = new THREE.MeshBasicMaterial({ color: 0xffffff, alphaTest: 0.1, transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false });
-            loader.load(this.imgurl, function (texture) {
-                texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-                material.map = texture;
+            this.mesh.material.forEach(material => {
+                material.opacity = n;
                 material.needsUpdate = true;
             });
-            mesh = new THREE.Mesh(cubeGeometry, material);
+        }
+        genMesh(cubeGeometry, mesh) {
+            var mesh;
+            var textures = this.getTexturesFromAtlasFile(this.imgurl, 6);
+            var materials = [];
+            for (var i = 0; i < 6; i++) {
+                var material = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, side: THREE.FrontSide, depthWrite: true, map: textures[i] });
+                materials.push(material);
+            }
+            mesh = new THREE.Mesh(cubeGeometry, materials);
+            console.log(mesh)
+            mesh.geometry.scale(1, 1, -1);
             mesh.position.copy(this.position);
             mesh.visible = false;
             return mesh;
         }
         setCoverPosition(position) {
             this.coverMesh.position.copy(position);
+        }
+        getTexturesFromAtlasFile(atlasImgUrl, tilesNum) {
+            var textures = [];
+            for (var i = 0; i < tilesNum; i++) {
+                textures[i] = new THREE.Texture();
+            }
+            var imageObj = new Image();
+            imageObj.crossOrigin = "anonymous";
+            var arr = [{ x: 0, y: 1 }, { x: 2, y: 1 }, { x: 1, y: 0 }, { x: 1, y: 2 }, { x: 1, y: 3 }, { x: 1, y: 1 }];
+            imageObj.onload = function () {
+                var canvas, context;
+                var tileWidth = imageObj.height / 4;
+                for (var i = 0; i < textures.length; i++) {
+                    canvas = document.createElement('canvas');
+                    context = canvas.getContext('2d');
+                    canvas.height = tileWidth;
+                    canvas.width = tileWidth;
+                    if (i == 2 || i == 3 || i == 4) {
+                        context.translate(tileWidth, tileWidth);
+                        context.rotate(180 * Math.PI / 180);
+                    }
+                    context.drawImage(imageObj, tileWidth * arr[i].x, tileWidth * arr[i].y, tileWidth, tileWidth, 0, 0, tileWidth, tileWidth);
+
+                    textures[i].image = canvas;
+                    textures[i].needsUpdate = true;
+                }
+            };
+            imageObj.src = atlasImgUrl;
+            return textures;
         }
 
     }
@@ -198,8 +236,9 @@
             var sumDistance = startTarget.distanceTo(newTarget);//总距离
 
             var tween = new TWEEN.Tween(oldTarget);
+            var animateDuration = sumDistance < 50 ? 2000 : sumDistance < 100 ? sumDistance * 50 : 4000;
             tween.easing(TWEEN.Easing.Quadratic.InOut);
-            tween.to(newTarget, 2000);
+            tween.to(newTarget, animateDuration);
             tween.start();
             this.hideAllButton();
             var curNodeLength = this.currentNode.length / 2;//当前节点内可相机移动范围的直径
@@ -243,7 +282,8 @@
             });
             tween.onComplete(function () {
                 scope.currentNode = node;
-                scope.updateButtons();
+                // scope.updateButtons();
+                scope.showAllButton();
                 scope.isMoving = false;
             });
 
@@ -286,7 +326,13 @@
         hideAllButton() {
             this.children.forEach(function (item) {
                 var button = item.buttonDom;
-                button.style.display = 'none';
+                button.style.visibility = 'hidden';
+            });
+        }
+        showAllButton() {
+            this.children.forEach(function (item) {
+                var button = item.buttonDom;
+                button.style.visibility = 'visible';
             });
         }
         updateButtons() {
@@ -330,17 +376,17 @@
         }
         init() {
             var container = this.dom;
-            this.renderer = new THREE.WebGLRenderer({ alpha: true });
+            this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
             this.renderer.setPixelRatio(window.devicePixelRatio);
             this.renderer.setSize(this.dom.offsetWidth, this.dom.offsetHeight);
-            this.renderer.setClearColor(0xffffff, 0);
+            this.renderer.setClearColor(0x888888, 0);
             container.appendChild(this.renderer.domElement);
 
             this.scene = new THREE.Scene();
 
-            this.camera = new THREE.PerspectiveCamera(90, this.dom.offsetWidth / this.dom.offsetHeight, 0.1, 100000);
+            this.camera = new THREE.PerspectiveCamera(90, this.dom.offsetWidth / this.dom.offsetHeight, 0.1, 100);
             this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
-            this.controls.target.z = 0.01;
+            this.controls.target.x = 0.01;
             Object.assign(this.controls, {
                 enableZoom: false,
                 enablePan: false,
