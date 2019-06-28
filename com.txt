@@ -1,1 +1,5 @@
-this is common file hehehe!
+<<<<<<< HEAD
+this is common file hehixi!
+=======
+this is common file xixixi!
+>>>>>>> b2
